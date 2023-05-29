@@ -1,6 +1,6 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import MainContainer from "../../components/MainContainer/MainContainer";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import MainContainer from '../../components/MainContainer/MainContainer';
 import {
   List,
   ListItem,
@@ -13,24 +13,24 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
-} from "@mui/material";
-import { useData } from "../../DataContext";
-import { InsertDriveFile } from "@mui/icons-material";
-import PrimaryButton from "../../components/Button/PrimaryButton";
+  Typography
+} from '@mui/material';
+import { useData } from '../../DataContext';
+import { InsertDriveFile } from '@mui/icons-material';
+import PrimaryButton from '../../components/Button/PrimaryButton';
 // import swal from "sweetalert";
 
 const Result = () => {
   const sxStyle = {
-    marginBottom: "15px",
+    marginBottom: '15px'
   };
   const { data } = useData();
 
-  const entries = Object.entries(data).filter((entry) => entry[0] !== "files");
+  const { files, ...entries } = data;
 
-  const { files } = data;
-
-  console.log(data);
+  const parsedEntries = Object.keys(entries)
+    .map((key) => ({ key, value: entries[key] }))
+    .filter((entry) => entry.value);
 
   // const onSubmit = async () => {
   //   const formData = new FormData();
@@ -61,10 +61,7 @@ const Result = () => {
         <Typography components="h2" variant="h5">
           Form Values
         </Typography>
-        <TableContainer
-          sx={{ marginTop: "20px", marginBottom: "15px" }}
-          component={Paper}
-        >
+        <TableContainer sx={{ marginTop: '20px', marginBottom: '15px' }} component={Paper}>
           <Table sx={sxStyle}>
             <TableHead>
               <TableRow>
@@ -73,10 +70,10 @@ const Result = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {entries.map((entry) => (
-                <TableRow key={entry[0]}>
-                  <TableCell>{entry[0]}</TableCell>
-                  <TableCell align="right">{entry[1].toString()}</TableCell>
+              {parsedEntries.map((entry) => (
+                <TableRow key={entry.key}>
+                  <TableCell>{entry.key}</TableCell>
+                  <TableCell align="right">{entry.value.toString()}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -101,10 +98,7 @@ const Result = () => {
         )}
         <PrimaryButton>Submit</PrimaryButton>
         {/* <PrimaryButton onClick={onSubmit}>Submit</PrimaryButton> */}
-        <Link
-          style={{ color: "black", marginTop: "15px", fontSize: "18px" }}
-          to="/"
-        >
+        <Link style={{ color: 'black', marginTop: '15px', fontSize: '18px' }} to="/">
           Start Over
         </Link>
       </MainContainer>

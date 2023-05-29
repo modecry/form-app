@@ -1,17 +1,15 @@
-import {
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Paper,
-} from "@mui/material";
-import React from "react";
-import Dropzone from "react-dropzone";
-import { Controller } from "react-hook-form";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { InsertDriveFile } from "@mui/icons-material";
+import { List, ListItem, ListItemIcon, ListItemText, Paper } from '@mui/material';
+import React from 'react';
+import Dropzone from 'react-dropzone';
+import { Controller } from 'react-hook-form';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { InsertDriveFile } from '@mui/icons-material';
 
-const InputFile = ({ control, name, register }) => {
+const InputFile = ({ control, name }) => {
+  const handleUploadFiles = (files, current) => {
+    return [...Array.from(files), ...current];
+  };
+
   return (
     <>
       <Controller
@@ -20,19 +18,11 @@ const InputFile = ({ control, name, register }) => {
         defaultValue={[]}
         render={({ field: { onChange, onBlur, value } }) => (
           <>
-            <Dropzone onChange={onChange}>
-              {({ getRootProps, getInputProps }) => (
-                <Paper variant="outlined" {...getRootProps()}>
-                  <CloudUploadIcon />
-                  <input
-                    {...getInputProps()}
-                    {...register("name")}
-                    onBlur={onBlur}
-                  />
-                  <p>Select Files</p>
-                </Paper>
-              )}
-            </Dropzone>
+            <input
+              type="file"
+              multiple
+              onChange={(e) => onChange(handleUploadFiles(e.target.files, value))}
+            />
             <List>
               {value.map((f, index) => (
                 <ListItem key={index}>
